@@ -136,7 +136,7 @@ You can see that each one response comes in separately, which could be a bad UX 
 
 #### Promises
 
-Promises are a lot easier to work with because we can pass them around. They are still a web api that gets stored in the `heap` but they
+Promises are a lot easier to work with because we can pass them around and you don't get in 'callback hell'. They are still a web api that gets stored in the `heap` and once resolved are placed inside the `task queue`.
 
 So you should have learned a little bit about promises by now.
 Like:
@@ -162,16 +162,32 @@ componentDidMount() {
 When the array is empty what do we console.log()?
 When we throw an empty object in there, what does it log?
 
-So now that you've got to play around a bit with then() & catch(), lets try another one. Promise.all().
+So now that you've got to play around a bit with then() & catch(), lets talk about using them with `fetch`.
 
 
 #### Fetch
 
 So if you don't know how to use `fetch` yet I suggest taking a five minutes to review the docs [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 
-Fetch returns a promise, which will either `resolve` or `reject` depending on the status code. You might want to take a look on when fetch actually catches errors [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful). The api can actually be set up in a way that can help fix some of this.
+Fetch returns a promise, which will either `resolve` or `reject` depending on the status code. You might want to take a look on when fetch actually catches errors [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful). The api can actually be set up in a way that can help fix this, but this is a major reason why some people dislike `fetch`.
 
-Also take a quick look at [.then()](https://developer.mozilla.org/en-US/docs/Web/API/Body/json)
+So if `fetch` returns a promise, right? Then it makes sense that you can chain `.then()` or `.catch()`
+
+So when we make a request and have a response come back in json, the typical move for fetch looks like:
+
+``` javascript
+  fetch('someapi.com')
+  .then((res) => res.json())
+  .then((body) => 'the response coming in as an object.')
+  // we could also write this like:
+
+  fetch('someapi.com')
+  .then((res) => res.json().then((body) => 'the response coming in as an object.'))
+
+  // notice that we are chaining to the res.json()
+```
+
+This is not the preferred way of doing things, but why can we do this? Take a look [here](https://developer.mozilla.org/en-US/docs/Web/API/Body/json)
 
 #### Promise.all()
 
