@@ -103,11 +103,19 @@ Talk about a quick review! How about we do some codez?
 
 ### Lets dive into callbacks and promises!
 
-Hokay. So. lets build a Front-end Turing staff website. What we have so far is an api that serves up a list of the staff members [here](). We also have our client side code located on this [repo]().
+Hokay. So. lets build a Front-end Turing staff website. What we have so far is an api that serves up a collection of members [here](). We also have our client side code located on this [repo]().
 
-What we want to do first is write some asynchronous code. Like we said before when we make a request call it gets put into the `heap` which stores that information until it is ready to run it's callback.
+What we want to do first is make a `request` which we now know is writing asynchronous code. Earlier we talked about the request call being put into the `heap` which stores that information until it is ready to run it's callback. Then it's transferred into the `task queue` till the `event loop` says it's ready to be put on the `call stack`
 
-The API given to us doesn't give us all the info needed to display the staff members. What we could do is just setState() each time it comes back but it ends up looking like:
+So the API given to us doesn't give us all the info needed to display the staff members.
+
+The endpoints given to us are:
+* http://localhost:3001/api/frontend-staff - this returns an array of objects that contain the name of each staff memeber and another endpoint to grab their bio.
+* http://localhost:3001//api/bio/:id - this is the endpoint given from each obj inside the array from the endpoint `frontend-staff`
+
+So once we make our call we will need to iterate over the array and make more requests for additional info.
+
+What we could do is setState() after each request is returned which will end up looking like this: :
 
 ``` javascript
 $.get('http://localhost:3001/api/frontend-staff', (info) => {
@@ -126,7 +134,9 @@ It will actually load the page seamlessly. Yet if you look at the console log yo
 
 You can see that each one response comes in separately, which could be a bad UX if sizing and images came in at all different times. Especially if there was heaver data coming in. I could put a setTimeout() let it wait 2 seconds and then setState but then we would be bogging down the entire task queue. Even then we don't actually know that all of them have come in! So lets move on to uses promises!
 
-#### Promises.all()
+#### Promises
+
+Promises are a lot easier to work with because we can pass them around. They are still a web api that gets stored in the `heap` but they
 
 So you should have learned a little bit about promises by now.
 Like:
@@ -165,4 +175,6 @@ Also take a quick look at [.then()](https://developer.mozilla.org/en-US/docs/Web
 
 #### Promise.all()
 
-So our fetch call takes a 
+So Promise.all() takes an array of promises, and will `resolve` only if all the promises `resolve` otherwise it will `reject`.
+
+How can we use this? Well
