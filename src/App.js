@@ -33,6 +33,7 @@ class App extends Component {
     fetch('http://localhost:3001/api/frontend-staff')
     .then((res) => res.json())
     .then((info) => {
+      console.log(info);
       const promises = info.bio.map((i) => fetch(i.info).then((res) => res.json()))
       return Promise.all(promises).then((members) => members.map((person, i) => Object.assign(info.bio[i], person)))
     }).then((people) => this.setState({ staff: people }))

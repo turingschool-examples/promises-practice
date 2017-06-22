@@ -1,13 +1,14 @@
 ## Promises Practice Repo
-  This repo was created using `create-react-app`
 
-  Clone this repo and the [promises-api]() repo down.
+This repo was created using `create-react-app`
 
-  For both:
+Clone this repo and the [promises-api]() repo down.
 
-  `npm install`
+For both:
 
-  `npm start`
+`npm install`
+
+`npm start`
 
 
 ### Learning Goals
@@ -193,4 +194,51 @@ This is not the preferred way of doing things, but why can we do this? Take a lo
 
 So Promise.all() takes an array of promises, and will `resolve` only if all the promises `resolve` otherwise it will `reject`.
 
-How can we use this? Well
+How can we use this to our advantage? So when we make our request to 'api/frontend-staff' we receive an `array` of staff members containing info to make more `fetch calls`.
+
+``` javascript
+fetch('http://localhost:3001/api/frontend-staff')
+.then((res) => res.json())
+// this returns =>
+{ bio: [
+        { info: "http://localhost:3001/api/bio/1",
+          name: "Romeeka Gayhart"
+        },
+        {...},
+        {...}
+       ]
+ }
+
+```
+
+So we're probably going to have to iterate through this array to make a fetch call for all the bios. If promise.all() expects an array of promises and fetch returns an promise, how can we use this to our advantage?
+
+If you thought to yourself use a .map! Then you're correct!
+``` javascript
+fetch('http://localhost:3001/api/frontend-staff')
+.then((res) => res.json())
+.then((info) => {
+  const promises = info.bio.map((i) => // iterates through array and map returns anything given to it, which we're given it promises.
+  fetch(i.info).then((res) => res.json()))
+
+  //Now we're going to wait for all the promises to resolve
+  return Promise.all(promises).then((members) => members.map((person, i) => Object.assign(info.bio[i], person)))
+
+  // and assign them to the original object. To add the additional info.
+
+  // we returned the promise.all to the original fetch promise so we can:
+  .then((people) => this.setState({ staff: people }))
+  .catch((error) => console.log(error))
+})
+```
+
+There we go! That was it, seems like a little bit more code but we can guarantee a better user experience!
+
+So there was a lot of info today!
+
+Feel free to look through resources:
+
+#### Resources
+* I used a lot of MDN docs which I tried to link to throughout the walkthrough [MDN docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop)
+* [Loupe](http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D), by Philip Roberts, was used for examples.
+* [DAN MARTENSEN](https://danmartensen.svbtle.com/events-concurrency-and-javascript) wrote this article that I referenced his code pen from.
