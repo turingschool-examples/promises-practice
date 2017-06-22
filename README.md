@@ -108,3 +108,61 @@ Hokay. So. lets build a Front-end Turing staff website. What we have so far is a
 What we want to do first is write some asynchronous code. Like we said before when we make a request call it gets put into the `heap` which stores that information until it is ready to run it's callback.
 
 The API given to us doesn't give us all the info needed to display the staff members. What we could do is just setState() each time it comes back but it ends up looking like:
+
+``` javascript
+$.get('http://localhost:3001/api/frontend-staff', (info) => {
+  info.bio.forEach((i) => {
+    $.get(i.info, (bio) => {
+      Object.assign(i, bio)
+      this.setState({ staff: info.bio })
+    })
+  })
+})
+```
+
+It will actually load the page seamlessly. Yet if you look at the console log you will see each one come in individually(I didn't log the bio info just because of the length).
+
+![console.log](./public/log.png)
+
+You can see that each one response comes in separately, which could be a bad UX if sizing and images came in at all different times. Especially if there was heaver data coming in. I could put a setTimeout() let it wait 2 seconds and then setState but then we would be bogging down the entire task queue. Even then we don't actually know that all of them have come in! So lets move on to uses promises!
+
+#### Promises.all()
+
+So you should have learned a little bit about promises by now.
+Like:
+* then()
+* catch()
+
+So for practice lets play around and create one. Take or comment any requests you have in your componentDidMount() and replace it with:
+*Do yourself a favor and actually type this out*
+```javascript
+
+componentDidMount() {
+  const promise = new Promise((resolve, reject) => {
+    if (this.state.staff.length === 0) { reject('Where did everyone go?') }
+    resolve(this.state.staff)
+  })
+
+  promise.then((foo) => console.log(foo))
+  .catch((err)=> console.log('mmm', err))
+}
+
+```
+
+When the array is empty what do we console.log()?
+When we throw an empty object in there, what does it log?
+
+So now that you've got to play around a bit with then() & catch(), lets try another one. Promise.all().
+
+
+#### Fetch
+
+So if you don't know how to use `fetch` yet I suggest taking a five minutes to review the docs [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+
+Fetch returns a promise, which will either `resolve` or `reject` depending on the status code. You might want to take a look on when fetch actually catches errors [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful). The api can actually be set up in a way that can help fix some of this.
+
+Also take a quick look at [.then()](https://developer.mozilla.org/en-US/docs/Web/API/Body/json)
+
+#### Promise.all()
+
+So our fetch call takes a 
