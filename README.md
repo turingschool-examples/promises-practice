@@ -213,28 +213,12 @@ fetch('http://localhost:3001/api/frontend-staff')
 
 So we're probably going to have to iterate through this array to make a fetch call for all the bios. If promise.all() expects an array of promises and fetch returns an promise, how can we use this to our advantage?
 
-If you thought to yourself use a .map! Then you're correct!
-``` javascript
-fetch('http://localhost:3001/api/frontend-staff')
-.then((res) => res.json())
-.then((info) => {
-  const promises = info.bio.map((i) => // iterates through array and map returns anything given to it, which we're given it promises.
-  fetch(i.info).then((res) => res.json()))
 
-  //Now we're going to wait for all the promises to resolve
-  return Promise.all(promises).then((members) => members.map((person, i) => Object.assign(info.bio[i], person)))
+EDIT: 
 
-  // and assign them to the original object. To add the additional info.
+The code example should go here but because I want you to learn this stuff I took it out.  
 
-  // we returned the promise.all to the original fetch promise so we can:
-  .then((people) => this.setState({ staff: people }))
-  .catch((error) => console.log(error))
-})
-```
-
-There we go! That was it, seems like a little bit more code but we can guarantee a better user experience!
-
-So there was a lot of info today!
+- yung-jhun
 
 Feel free to look through resources:
 
