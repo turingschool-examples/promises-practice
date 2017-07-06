@@ -33,7 +33,7 @@ Javascript, `a single-threaded non-blocking asynchronous concurrent language`. W
 
 #### Single-threaded
 
-As we know javascript has a single-threaded `call stack` that has stack frames. As our code is run, each stack frame is pushed and popped from the top of the call stack, the top being the currently executing code.
+As we know javascript has a single-threaded `call stack` that has stack frames. As our code is run, each stack frame is pushed and popped from the top of the call stack, the top being the current code being executed.
 
 *Quick plug to Philip Roberts for having an amazing talk, which you can find [here](https://www.youtube.com/watch?v=8aGhZQkoFbQ)*
 
