@@ -67,9 +67,9 @@ console.log(bar(7));
 
   Now we continue on with `foo(x * y)` which pushes `a + b + 11` to the top of the stack to immediately get popped off leaving `a + b` to be pushed to the top. Then finishes off by popping all the rest of the stack. This will finish by returning `42` to the console.
 
-  Well that was a lot. So I suggest you go use the tool above and create something a little simpler!
+  Go try it out [here](http://latentflip.com/loupe/?code=ZnVuY3Rpb24gZm9vKGIpIHsKICB2YXIgYSA9IDEwOwogIHJldHVybiBhICsgYiArIDExOwp9CgpmdW5jdGlvbiBiYXIoeCkgewogIHZhciB5ID0gMzsKICByZXR1cm4gZm9vKHggKiB5KTsKfQoKY29uc29sZS5sb2coYmFyKDcpKTs%3D!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D). Did anything happen you didn't expect? Talk to a neighbor about what you've learned after playing around with the stack.
 
-  Three things to note about our JS call stack
+  So! From the image above we can start to understand these these concepts:
   * `Single threaded:` Threads are basic units of CPU utilization.
   * `Synchronous:` JavaScript call stack carries out tasks to completion instead of task switching and the same holds for events.
   * `Non-blocking:` Blocking occurs when the application state is suspended as a thread runs.
