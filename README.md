@@ -71,7 +71,7 @@ console.log(bar(7));
 
   So! From the image above we can start to understand these these concepts:
   * `Single threaded:` Threads are basic units of CPU utilization.
-  * `Synchronous:` JavaScript call stack carries out tasks to completion instead of task switching and the same holds for events.
+  * `Asynchronous:` JavaScript call stack carries out tasks to completion instead of task switching and the same holds for events.
   * `Non-blocking:` Blocking occurs when the application state is suspended as a thread runs.
 
 
