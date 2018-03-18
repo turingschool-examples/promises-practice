@@ -35,7 +35,7 @@ Javascript, `a single-threaded, non-blocking, asynchronous, concurrent language`
 
 As we know javascript has a single-threaded `call stack` that has stack frames. As our code is run, each stack frame is pushed and popped from the top of the call stack, the top being the current code being executed.
 
-*Check out this awesome video if you want a deeper dive into the `call stack`, `task queue`, 'event loop`, `web APIs` and how they all work together  [VIDEO](https://www.youtube.com/watch?v=8aGhZQkoFbQ)*
+*Check out this awesome video if you want a deeper dive into the `call stack`, `task queue`, `event loop`, `web APIs` and how they all work together  [VIDEO](https://www.youtube.com/watch?v=8aGhZQkoFbQ)*
 
 So consider the javascript:
 
