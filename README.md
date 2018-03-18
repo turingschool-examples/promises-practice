@@ -29,13 +29,13 @@ Brief Understanding of:
 
 ### Quick Review
 
-Javascript, `a single-threaded non-blocking asynchronous concurrent language`. Whoa well that's a mouth full. Okay, that also seems a little confusing. Lets go ahead and break this thing off into little sections.
+Javascript, `a single-threaded, non-blocking, asynchronous, concurrent language`. That's a mouth full... Let's break things down into sections that are a bit more manageable.
 
 #### Single-threaded
 
 As we know javascript has a single-threaded `call stack` that has stack frames. As our code is run, each stack frame is pushed and popped from the top of the call stack, the top being the current code being executed.
 
-*Quick plug to Philip Roberts for having an amazing talk, which you can find [here](https://www.youtube.com/watch?v=8aGhZQkoFbQ)*
+*Check out this awesome video if you want a deeper dive into the `call stack`, `task queue`, 'event loop`, `web APIs` and how they all work together  [VIDEO](https://www.youtube.com/watch?v=8aGhZQkoFbQ)*
 
 So consider the javascript:
 
