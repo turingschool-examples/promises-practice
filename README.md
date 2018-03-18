@@ -98,9 +98,9 @@ When your code first executes, it loads events and saves them in [`heap`](https:
 
 Now we also saw that the `DOM event listener`, when put on the call stack(line 1) is pushed to the web apis storage and waits/listens for its time to be called. You'll notice that once I trigger the event by clicking the 'Click me!' button, that callback is pushed to the `callback queue / task queue`. Once the stack has cleared the `event loop` will trigger the next callback.
 
-So what does this mean? So yes, your JS code is running on a single call stack (single-threaded) but under your JS, the browser code is running multiple threads to capture events and trigger handlers, when they capture any new event, they push it on an event queue and then that event loop, in which your code is running gets triggered and it handles the request.
+So what does this mean? Yes, your JS code is running on a single call stack (single-threaded). But under your JS, the browser code is running multiple threads to manage async actions. When an async action is done doing its thing, the callback gets pushed on the task queue. The event loop is constantly checking to see if the call stack is empty, and when it is, the task queue grabs the first thing in the queue and puts it on the call stack. And this is where the function is executed.
 
-Talk about a quick review! How about we do some codez?
+Hope that review was helpful!
 
 ### Let's dive in and build a Front-end Turing staff website
 
