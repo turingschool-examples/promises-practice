@@ -102,16 +102,16 @@ So what does this mean? So yes, your JS code is running on a single call stack (
 
 Talk about a quick review! How about we do some codez?
 
-### Lets dive into callbacks and promises!
+### Let's dive in and build a Front-end Turing staff website
 
-Hokay. So. lets build a Front-end Turing staff website. What we have so far is an api that serves up a collection of members [here](https://github.com/turingschool-examples/promises-api). We also have our client side code located on this [repo](https://github.com/turingschool-examples/promises-practice).
+What we have so far is an api that serves up a collection of members [here](https://github.com/turingschool-examples/promises-api). We also have our client side code located on this [repo](https://github.com/turingschool-examples/promises-practice).
 
-What we want to do first is make a `request` which we now know is writing asynchronous code. Earlier we talked about the request call being put into the `heap` which stores that information until it is ready to run it's callback. Then it's transferred into the `task queue` till the `event loop` says it's ready to be put on the `call stack`
+What we want to do first is make a `request`, which we now know is writing asynchronous code. Earlier we talked about the request call being put into the `heap` which stores that information until it is ready to run it's callback. Then it's transferred into the `task queue` till the `event loop` says it's ready to be put on the `call stack`
 
 So the API given to us doesn't give us all the info needed to display the staff members.
 
 The endpoints given to us are:
-* http://localhost:3001/api/frontend-staff - this returns an array of objects that contain the name of each staff memeber and another endpoint to grab their bio.
+* http://localhost:3001/api/frontend-staff - this returns an object with a key of bio nad the value is an array of objects that contain the name of each staff memeber and another endpoint to grab some additional info (bio & image).
 * http://localhost:3001//api/bio/:id - this is the endpoint given from each obj inside the array from the endpoint `frontend-staff`
 
 So once we make our call we will need to iterate over the array and make more requests for additional info.
@@ -213,14 +213,6 @@ fetch('http://localhost:3001/api/frontend-staff')
 
 So we're probably going to have to iterate through this array to make a fetch call for all the bios. If promise.all() expects an array of promises and fetch returns an promise, how can we use this to our advantage?
 
-
-EDIT: 
-
-The code example should go here but because I want you to learn this stuff I took it out.  
-
-- yung-jhun
-
-Feel free to look through resources:
 
 #### Resources
 * I used a lot of MDN docs which I tried to link to throughout the walkthrough [MDN docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop)
