@@ -140,7 +140,9 @@ So for practice lets play around and create one. Take or comment any requests yo
 
 componentDidMount() {
   const promise = new Promise((resolve, reject) => {
-    if (this.state.staff.length === 0) { reject('Where did everyone go?') }
+    if (this.state.staff.length === 0) {
+      reject('Where did everyone go?')
+    }
     resolve(this.state.staff)
   })
 
@@ -162,27 +164,24 @@ So if you don't know how to use `fetch` yet I suggest taking a five minutes to r
 
 Fetch returns a promise, which will either `resolve` or `reject` depending on the status code. You might want to take a look on when fetch actually catches errors [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful). The api can actually be set up in a way that can help fix this, but this is a major reason why some people dislike `fetch`.
 
-So if `fetch` returns a promise, right? Then it makes sense that you can chain `.then()` or `.catch()`
+So, since `fetch` returns a promise, then it makes sense that you can chain `.then()` or `.catch()` to it.
 
-So when we make a request and have a response come back in json, the typical move for fetch looks like:
+When we make a request and the response comes back as JSON, the first thing we need to do is parse the JSON.
 
 ``` javascript
   fetch('someapi.com')
-  .then((res) => res.json())
-  .then((body) => 'the response coming in as an object.')
-  // we could also write this like:
+  .then(response => response.json())
+  .then(body => 'the response coming in as an object.')
 
-  fetch('someapi.com')
-  .then((res) => res.json().then((body) => 'the response coming in as an object.'))
-
-  // notice that we are chaining to the res.json()
+  // notice that we are chaining to the response.json()
+  // this is because response.json() also returns a PROMISE
 ```
 
 This is not the preferred way of doing things, but why can we do this? Take a look [here](https://developer.mozilla.org/en-US/docs/Web/API/Body/json)
 
 #### Promise.all()
 
-So Promise.all() takes an array of promises, and will `resolve` only if all the promises `resolve` otherwise it will `reject`.
+So Promise.all() takes an array of promises, and will `resolve` only if all the promises `resolve`; otherwise it will `reject`.
 
 How can we use this to our advantage? So when we make our request to 'api/frontend-staff' we receive an `array` of staff members containing info to make more `fetch calls`.
 
