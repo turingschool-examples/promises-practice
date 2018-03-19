@@ -112,9 +112,7 @@ Hope that review was helpful!
 
 What we have so far is an api that serves up a collection of members [here](https://github.com/turingschool-examples/promises-api). We also have our client side code located on this [repo](https://github.com/turingschool-examples/promises-practice).
 
-What we want to do first is make a `request`, which we now know is writing asynchronous code. Earlier we talked about the request call being put into the `heap` which stores that information until it is ready to run it's callback. Then it's transferred into the `task queue` till the `event loop` says it's ready to be put on the `call stack`
-
-So the API given to us doesn't give us all the info needed to display the staff members.
+So the API given to us doesn't automatically give us all the info needed to display the staff members. There is a second nested endpoint we will need to fetch..
 
 The endpoints given to us are:
 * http://localhost:3001/api/frontend-staff - this returns an object with a key of bio and the value is an array of objects that contain the name of each staff member and another endpoint to grab some additional info (bio & image).
