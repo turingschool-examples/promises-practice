@@ -117,32 +117,13 @@ What we want to do first is make a `request`, which we now know is writing async
 So the API given to us doesn't give us all the info needed to display the staff members.
 
 The endpoints given to us are:
-* http://localhost:3001/api/frontend-staff - this returns an object with a key of bio nad the value is an array of objects that contain the name of each staff memeber and another endpoint to grab some additional info (bio & image).
+* http://localhost:3001/api/frontend-staff - this returns an object with a key of bio and the value is an array of objects that contain the name of each staff member and another endpoint to grab some additional info (bio & image).
 
 ![api/frontend-staff](./public/api-frontend-staff.png)
 
 * http://localhost:3001//api/bio/:id - this is the endpoint given from each obj inside the array from the endpoint `frontend-staff`
 
 So once we make our call we will need to iterate over the array and make more requests for additional info.
-
-What we could do is setState() after each request is returned which will end up looking like this: :
-
-``` javascript
-$.get('http://localhost:3001/api/frontend-staff', (info) => {
-  info.bio.forEach((i) => {
-    $.get(i.info, (bio) => {
-      Object.assign(i, bio)
-      this.setState({ staff: info.bio })
-    })
-  })
-})
-```
-
-It will actually load the page seamlessly. Yet if you look at the console log you will see each one come in individually(I didn't log the bio info just because of the length).
-
-![console.log](./public/log.png)
-
-You can see that each one response comes in separately, which could be a bad UX if sizing and images came in at all different times. Especially if there was heaver data coming in. I could put a setTimeout() let it wait 2 seconds and then setState but then we would be bogging down the entire task queue. Even then we don't actually know that all of them have come in! So lets move on to uses promises!
 
 #### Promises
 
