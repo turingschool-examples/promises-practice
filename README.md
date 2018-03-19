@@ -102,9 +102,11 @@ So what does this mean? Yes, your JS code is running on a single call stack (sin
 
 Hope that review was helpful!
 
-### Let's dive in and build a Front-end Turing staff website
+## Let's dive in and build a Front-end Turing staff website
 
 ![spec](./public/spec.png)
+
+## What we're working with
 
 What we have so far is an api that serves up a collection of members [here](https://github.com/turingschool-examples/promises-api). We also have our client side code located on this [repo](https://github.com/turingschool-examples/promises-practice).
 
