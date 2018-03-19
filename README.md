@@ -29,11 +29,11 @@ Brief Understanding of:
 
 ### Quick Review
 
-Javascript, `a single-threaded, non-blocking, asynchronous, concurrent language`. That's a mouth full... Let's break things down into sections that are a bit more manageable.
+Javascript is `a single-threaded, non-blocking, asynchronous, concurrent language`. That's a mouth full... Let's break things down into sections that are a bit more manageable.
 
 #### Single-threaded
 
-As we know javascript has a single-threaded `call stack` that has stack frames. As our code is run, each stack frame is pushed and popped from the top of the call stack, the top being the current code being executed.
+As we know javascript has a single-threaded `call stack` that has stack frames. As our code is run, each stack frame is pushed and popped from the top of the call stack, the top being the current code being executed. Think of a can of Pringles... the first in is the last out (FILO).
 
 *Check out this awesome video if you want a deeper dive into the `call stack`, `task queue`, `event loop`, `web APIs` and how they all work together  [VIDEO](https://www.youtube.com/watch?v=8aGhZQkoFbQ)*
 
@@ -77,7 +77,7 @@ console.log(bar(7));
 
 #### Non-blocking
 
-'A very interesting property of the event loop model is that JavaScript, unlike a lot of other languages, never blocks. Handling I/O is typically performed via events and callbacks, so when the application is waiting for an IndexedDB query to return or an XHR request to return, it can still process other things like user input.'[*](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop#Never_blocking)
+A very interesting property of the event loop model is that JavaScript, unlike a lot of other languages, never blocks. Handling I/O is typically performed via events and callbacks, so when the application is waiting for a network request to return, it can still process other things like user input.[*](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop#Never_blocking)
 
 Heres a great example:
 
@@ -129,17 +129,16 @@ The endpoints given to us are:
 * Promise.all(promises)
   * returns a single promise
   
-#### Promises
+The first thing we need ask ourselves is where do we want to fetch our data from. This [article](https://www.robinwieruch.de/react-fetching-data/) does a really solid job of answering that question. Looks like componentDidMount() is our best option. With componentDidMount(), We can be assured that our component has mounted on the DOM and we can also setState there once we get our data back. 
 
-Promises are a lot easier to work with because we can pass them around and you don't get in 'callback hell'. They are still a web api that gets stored in the `heap` and once resolved are placed inside the `task queue`.
+#### Fetch
 
-So you should have learned a little bit about promises by now.
-Like:
-* then()
-* catch()
+If you're not feeling totally comfortable with `fetch` yet, I suggest taking a five minutes to review the [docs] (https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 
-So for practice lets play around and create one. Take or comment any requests you have in your componentDidMount() and replace it with:
-*Do yourself a favor and actually type this out*
+Fetch returns a promise, which will either `resolve` or `reject` depending on the status of the promise. You might want to take a look at when fetch actually catches errors [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful). The api can actually be set up in a way that can help fix this, but this is a major reason why some people dislike `fetch`.
+
+So, since `fetch` returns a promise, it makes sense that you can chain `.then()` or `.catch()` to it.
+
 ```javascript
 
 componentDidMount() {
@@ -148,23 +147,10 @@ componentDidMount() {
   .then(response => response.json())
   .then(data => this.fetchBios(data.bios)) // we'll write this function that will fetch all of the nested endpoints shortly
   .then(staff => this.setState({ staff }))
-  
-  // notice that we are chaining to the response.json()
-  // this is because response.json() also returns a PROMISE
 }
 
 ```
-When we make a request and the response comes back as JSON, the first thing we need to do is parse the JSON.
-
-
-
-#### Fetch
-
-So if you don't know how to use `fetch` yet I suggest taking a five minutes to review the docs [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
-
-Fetch returns a promise, which will either `resolve` or `reject` depending on the status code. You might want to take a look on when fetch actually catches errors [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful). The api can actually be set up in a way that can help fix this, but this is a major reason why some people dislike `fetch`.
-
-So, since `fetch` returns a promise, then it makes sense that you can chain `.then()` or `.catch()` to it.
+When we make a request and the response comes back as JSON, the first thing we need to do is parse the JSON. Notice also that we are chaining another .then() to the response.json(). We can do this because .json() also returns a promise!
 
 This is not the preferred way of doing things, but why can we do this? Take a look [here](https://developer.mozilla.org/en-US/docs/Web/API/Body/json)
 
