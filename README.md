@@ -86,9 +86,9 @@ Heres a great example:
 
 #### Asynchronous
 
-Still confused? Yup; you, me and everyone else. It's hard but it's a good thing to keep in the back of your head. So lets continue on with asynchronous. Clearly with non-blocking we can have a user click a button and continue on with I/O without making them wait.
+Let's continue on with asynchronous. With non-blocking code, we can have a user click a button and continue on with I/O without making them wait.
 
-So why is that? Well for a long time the web has used `callbacks` to help solve this issue. Allowing code to be executed once its finished. For example the `browser` has web api's that take callbacks as an argument, like: `XHR`, `SetTimeout`, `DOM` events. These things have their own `callback queues`/`task queues` which run an `event loop`.
+How does that work? Well for a long time the web has used `callbacks` to help solve this issue, allowing code to be executed once its finished. For example, the `browser` has web api's that take callbacks as an argument, like: `XHR`, `SetTimeout`, `DOM` events. These things have their own `callback queues`/`task queues` which run an `event loop`.
 
 
 Here's an example:
@@ -123,8 +123,14 @@ The endpoints given to us are:
 
 * http://localhost:3001//api/bio/:id - this is the endpoint given from each obj inside the array from the endpoint `frontend-staff`
 
-So once we make our call we will need to iterate over the array and make more requests for additional info.
-
+#### Let's do a little pseudo-coding
+* make initial fetch
+* map over the array of staff members 
+  * I need to fetch each endpoint
+  * this map is going to return a promise
+* Promise.all(promises)
+  * returns a single promise
+  
 #### Promises
 
 Promises are a lot easier to work with because we can pass them around and you don't get in 'callback hell'. They are still a web api that gets stored in the `heap` and once resolved are placed inside the `task queue`.
@@ -139,23 +145,19 @@ So for practice lets play around and create one. Take or comment any requests yo
 ```javascript
 
 componentDidMount() {
-  const promise = new Promise((resolve, reject) => {
-    if (this.state.staff.length === 0) {
-      reject('Where did everyone go?')
-    }
-    resolve(this.state.staff)
-  })
-
-  promise.then((foo) => console.log(foo))
-  .catch((err)=> console.log('mmm', err))
+  const url = 'http://localhost:3001/api/frontend-staff'
+  fetch(url)
+  .then(response => response.json())
+  .then(data => this.fetchBios(data.bios)) // we'll write this function that will fetch all of the nested endpoints shortly
+  .then(staff => this.setState({ staff }))
+  
+  // notice that we are chaining to the response.json()
+  // this is because response.json() also returns a PROMISE
 }
 
 ```
+When we make a request and the response comes back as JSON, the first thing we need to do is parse the JSON.
 
-When the array is empty what do we console.log()?
-When we throw an empty object in there, what does it log?
-
-So now that you've got to play around a bit with then() & catch(), lets talk about using them with `fetch`.
 
 
 #### Fetch
@@ -165,17 +167,6 @@ So if you don't know how to use `fetch` yet I suggest taking a five minutes to r
 Fetch returns a promise, which will either `resolve` or `reject` depending on the status code. You might want to take a look on when fetch actually catches errors [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful). The api can actually be set up in a way that can help fix this, but this is a major reason why some people dislike `fetch`.
 
 So, since `fetch` returns a promise, then it makes sense that you can chain `.then()` or `.catch()` to it.
-
-When we make a request and the response comes back as JSON, the first thing we need to do is parse the JSON.
-
-``` javascript
-  fetch('someapi.com')
-  .then(response => response.json())
-  .then(body => 'the response coming in as an object.')
-
-  // notice that we are chaining to the response.json()
-  // this is because response.json() also returns a PROMISE
-```
 
 This is not the preferred way of doing things, but why can we do this? Take a look [here](https://developer.mozilla.org/en-US/docs/Web/API/Body/json)
 
@@ -202,8 +193,19 @@ fetch('http://localhost:3001/api/frontend-staff')
 
 So we're probably going to have to iterate through this array to make a fetch call for all the bios. If promise.all() expects an array of promises and fetch returns an promise, how can we use this to our advantage?
 
+``` javascript
+fetchBios = (staff) => {
+  const promises = staff.map(staffMember => {
+    return fetch(staffMember.info)
+    .then(response => response.json())
+    .then(data => ({...data, name: staffMember.name}))
+  })
+  return Promise.all(promises)
+}
+```
+
 
 #### Resources
-* I used a lot of MDN docs which I tried to link to throughout the walkthrough [MDN docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop)
+* [MDN docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop)
 * [Loupe](http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D), by Philip Roberts, was used for examples.
 * [DAN MARTENSEN](https://danmartensen.svbtle.com/events-concurrency-and-javascript) wrote this article that I referenced his code pen from.
