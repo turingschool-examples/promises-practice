@@ -133,7 +133,7 @@ The first thing we need ask ourselves is where do we want to fetch our data from
 
 #### Fetch
 
-If you're not feeling totally comfortable with `fetch` yet, I suggest taking a five minutes to review the [docs] (https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+If you're not feeling totally comfortable with `fetch` yet, I suggest taking a five minutes to review the [docs](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 
 Fetch returns a promise, which will either `resolve` or `reject` depending on the status of the promise. You might want to take a look at when fetch actually catches errors [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful). The api can actually be set up in a way that can help fix this, but this is a major reason why some people dislike `fetch`.
 
@@ -150,13 +150,13 @@ componentDidMount() {
 }
 
 ```
-When we make a request and the response comes back as JSON, the first thing we need to do is parse the JSON. Notice also that we are chaining another .then() to the response.json(). We can do this because .json() also returns a promise!
-
-This is not the preferred way of doing things, but why can we do this? Take a look [here](https://developer.mozilla.org/en-US/docs/Web/API/Body/json)
+When we make a request and the response comes back as JSON, the first thing we need to do is parse the JSON. Notice also that we are chaining another .then() to the response.json(). We can do this because .json() returns a promise that resolves with the result of parsing the body text as JSON.
 
 #### Promise.all()
 
-So Promise.all() takes an array of promises, and will `resolve` only if all the promises `resolve`; otherwise it will `reject`.
+Now that we have our initial fetch set up, we need to iterate over the array to fetch the other information we need. Yes, we could make 10 different fetch calls, but all our data is going to come back at different times. That's not going to make for a great UI experience. How can we fetch the additional data, but wait for all the data to be returned before we do anything with it? Enter Promise.all()
+
+So Promise.all() takes an array of promises and returns a single promise that will either `resolve` when every promise has resolved or `reject` with the reason of the first value in the array that reject. If the promise array resolves completely, the resulting values will be an array of values whose results are ordered by the order of the promises in the original array - regardless of which promises resolve first. 
 
 How can we use this to our advantage? So when we make our request to 'api/frontend-staff' we receive an `array` of staff members containing info to make more `fetch calls`.
 
@@ -175,7 +175,7 @@ fetch('http://localhost:3001/api/frontend-staff')
 
 ```
 
-So we're probably going to have to iterate through this array to make a fetch call for all the bios. If promise.all() expects an array of promises and fetch returns an promise, how can we use this to our advantage?
+So we're probably going to have to iterate over this array to make a fetch call for all the bios and images. 
 
 ``` javascript
 fetchBios = (staff) => {
