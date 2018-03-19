@@ -106,7 +106,7 @@ Hope that review was helpful!
 
 ![spec](./public/spec.png)
 
---
+---
 
 ### What we're working with
 
@@ -188,11 +188,11 @@ How can we use this to our advantage? So when we make our request to 'api/fronte
 
 ``` javascript
 fetch('http://localhost:3001/api/frontend-staff')
-.then((res) => res.json())
+.then(response => response.json())
 // this returns =>
 { bio: [
-        { info: "http://localhost:3001/api/bio/1",
-          name: "Romeeka Gayhart"
+        { name: "Louisa Barrett",
+          info: "http://localhost:3001/api/bio/1"
         },
         {...},
         {...}
