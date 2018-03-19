@@ -106,7 +106,9 @@ Hope that review was helpful!
 
 ![spec](./public/spec.png)
 
-## What we're working with
+--
+
+### What we're working with
 
 What we have so far is an api that serves up a collection of members [here](https://github.com/turingschool-examples/promises-api). We also have our client side code located on this [repo](https://github.com/turingschool-examples/promises-practice).
 
