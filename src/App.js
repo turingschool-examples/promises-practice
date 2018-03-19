@@ -13,6 +13,8 @@ class App extends Component {
   }
 
   render() {
+    const { staff } = this.state
+
     return (
       <div className="App">
         <div className="App-header">
@@ -22,9 +24,9 @@ class App extends Component {
         <div className="App-intro">
           <div className='staff'>
             {
-              this.state.staff.length === 0 ?
+              !staff.length ?
               <Loader /> :
-              <StaffList array={this.state.staff} />
+              <StaffList staff={staff} />
             }
           </div>
         </div>
