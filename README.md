@@ -147,6 +147,7 @@ componentDidMount() {
   .then(response => response.json())
   .then(data => this.fetchBios(data.bios)) // we'll write this function that will fetch all of the nested endpoints shortly
   .then(staff => this.setState({ staff }))
+  .catch(error => console.log(error))
 }
 
 ```
@@ -183,6 +184,7 @@ fetchBios = (staff) => {
     return fetch(staffMember.info)
     .then(response => response.json())
     .then(data => ({...data, name: staffMember.name}))
+    .catch(error => console.log(error))
   })
   return Promise.all(promises)
 }
