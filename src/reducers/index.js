@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import {staffReducer} from './staffReducer';
+import { isLoading, hasErrored, staff } from './staffReducer';
 
 const rootReducer = combineReducers({
-  staff: staffReducer
+  staff,
+  isLoading,
+  hasErrored
 })
 
 export default rootReducer;
