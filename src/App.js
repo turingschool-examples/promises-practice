@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import Loader from './Loader.js';
 import './App.css';
-import $ from 'jquery';
 import StaffList from './StaffList.js';
+import { connect } from 'react-redux';
+import { fetchStaff } from './actions';
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      staff: []
-    };
+
+
+  componentDidMount() {
+    const url = 'http://localhost:3001/api/frontend-staff'
+    this.props.fetchStaff(url)
   }
 
   render() {
-    const { staff } = this.state
+    const { staff, hasErrored, isLoading } = this.props
 
     return (
       <div className="App">
@@ -24,9 +25,10 @@ class App extends Component {
         <div className="App-intro">
           <div className='staff'>
             {
-              !staff.length ?
-              <Loader /> :
-              <StaffList staff={staff} />
+              hasErrored ? <p>Sorry! There was an error loading the page.</p> : ''
+            }
+            {
+              isLoading ? <Loader /> : <StaffList staff={staff} />
             }
           </div>
         </div>
@@ -35,4 +37,14 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  staff: state.staff,
+  isLoading: state.isLoading,
+  hasErrored: state.hasErrored
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchStaff: (url) => dispatch(fetchStaff(url))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
