@@ -14,39 +14,39 @@ export const staffFetchDataSuccess = (staff) => ({
 })
 
 export const fetchStaff = (url) => {
-  return (dispatch) =>  {
-    dispatch(isLoading(true))
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText)
-        }
-        dispatch(isLoading(false))
-        return response
-    })
-    .then(response => response.json())
-    .then(data => dispatch(fetchBios(data.bio)))
-    .then(staff => dispatch(staffFetchDataSuccess(staff)))
-    .catch(() => dispatch(hasErrored(true)))
+  return async (dispatch) =>  {
+    try {
+      dispatch(isLoading(true))
+      const response = await fetch(url)
+      if(!response.ok) {
+        throw Error(response.statusText)
+      }
+      dispatch(isLoading(false))
+      const data = await response.json()
+      const staff = await dispatch(fetchBios(data.bio))
+      dispatch(staffFetchDataSuccess(staff))
+    } catch (error) {
+      dispatch(hasErrored(true))
+    }
   }
 }
 
 export const fetchBios = (staffArray) => {
   return (dispatch) => {
-    dispatch(isLoading(true))
-    const unresolvedPromises = staffArray.map(staffMember => {
-      return fetch(staffMember.info)
-      .then(response => {
-        if (!response.ok) {
+    try {
+      dispatch(isLoading(true))
+      const unresolvedPromises = staffArray.map(async staffMember => {
+        const response = await fetch(staffMember.info)
+        if(!response.ok) {
           throw Error(response.statusText)
         }
         dispatch(isLoading(false))
-        return response
+        const data = await response.json()
+        return { ...data, name: staffMember.name}
       })
-      .then(response => response.json())
-      .then(data => ({...data, name: staffMember.name}))
-      .catch(() => dispatch(hasErrored(true)))
-    })
-    return Promise.all(unresolvedPromises);
+      return Promise.all(unresolvedPromises)
+    } catch (error) {
+      dispatch(hasErrored(true))
+    }
   }
 }
