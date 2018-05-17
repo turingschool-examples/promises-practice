@@ -13,38 +13,38 @@ class App extends Component {
     };
   }
 
-  fetchStaff = (url) => {
-    this.setState({ isLoading: true })
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText)
-        }
-        this.setState({ isLoading: false })
-        return response
-      })
-      .then(response => response.json())
-      .then(data => this.fetchBios(data.bio))
-      .then(staff => this.setState({ staff }))
-      .catch(() => this.setState({ hasErrored: true }))
+  fetchStaff = async (url) => {
+    try {
+      this.setState({ isLoading: true })
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw Error(response.statusText)
+      }
+      this.setState({ isLoading: false })
+      const data = await response.json()
+      const staff = await this.fetchBios(data.bio)
+      this.setState({ staff })
+    } catch (error) {
+        this.setState({ hasErrored: true })
+      }
   }
 
   fetchBios = (staffArray) => {
-    this.setState({ isLoading: true })
-    const unresolvedPromises = staffArray.map(staffMember => {
-      return fetch(staffMember.info)
-      .then(response => {
+    try {
+      this.setState({ isLoading: true })
+      const unresolvedPromises = staffArray.map(async staffMember => {
+        const response = await fetch(staffMember.info)
         if (!response.ok) {
           throw Error(response.statusText)
         }
         this.setState({ isLoading: false })
-        return response
+        const data = await response.json()
+        return { ...data, name: staffMember.name }
       })
-      .then(response => response.json())
-      .then(data => ({...data, name: staffMember.name}))
-      .catch(() => this.setState({ hasErrored: true }))
-    })
-    return Promise.all(unresolvedPromises);
+      return Promise.all(unresolvedPromises);
+    } catch (error) {
+      this.setState({ hasErrored: true })
+    }
   }
 
   componentDidMount() {
