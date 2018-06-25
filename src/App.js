@@ -3,7 +3,7 @@ import Loader from './Loader.js';
 import './App.css';
 import StaffList from './StaffList.js';
 import { connect } from 'react-redux';
-import { fetchStaff } from './actions';
+import { fetchStaff } from './thunks';
 
 class App extends Component {
 
