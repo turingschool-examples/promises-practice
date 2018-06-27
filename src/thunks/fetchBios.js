@@ -16,6 +16,6 @@ export const fetchBios = (staffArray) => {
         dispatch(hasErrored(true))
         }
       })
-      return Promise.all(unresolvedPromises)
+    return Promise.all(unresolvedPromises)
   }
 }
