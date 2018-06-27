@@ -30,9 +30,9 @@ class App extends Component {
   }
 
   fetchBios = (staffArray) => {
-    try {
-      this.setState({ isLoading: true })
-      const unresolvedPromises = staffArray.map(async staffMember => {
+    this.setState({ isLoading: true })
+    const unresolvedPromises = staffArray.map(async staffMember => {
+      try {
         const response = await fetch(staffMember.info)
         if (!response.ok) {
           throw Error(response.statusText)
@@ -40,11 +40,11 @@ class App extends Component {
         this.setState({ isLoading: false })
         const data = await response.json()
         return { ...data, name: staffMember.name }
+      } catch (error) {
+        this.setState({ hasErrored: true })
+        }
       })
-      return Promise.all(unresolvedPromises);
-    } catch (error) {
-      this.setState({ hasErrored: true })
-    }
+    return Promise.all(unresolvedPromises); 
   }
 
   componentDidMount() {
