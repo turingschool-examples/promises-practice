@@ -1,19 +1,59 @@
 import React, { Component } from 'react';
 import Loader from './Loader.js';
 import './App.css';
-import $ from 'jquery';
 import StaffList from './StaffList.js';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      staff: []
+      staff: [],
+      isLoading: false,
+      hasErrored: false
     };
   }
 
+  fetchStaff = async (url) => {
+    try {
+      this.setState({ isLoading: true })
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw Error(response.statusText)
+      }
+      this.setState({ isLoading: false })
+      const data = await response.json()
+      const staff = await this.fetchBios(data.bio)
+      this.setState({ staff })
+    } catch (error) {
+        this.setState({ hasErrored: true })
+      }
+  }
+
+  fetchBios = (staffArray) => {
+    this.setState({ isLoading: true })
+    const unresolvedPromises = staffArray.map(async staffMember => {
+      try {
+        const response = await fetch(staffMember.info)
+        if (!response.ok) {
+          throw Error(response.statusText)
+        }
+        this.setState({ isLoading: false })
+        const data = await response.json()
+        return { ...data, name: staffMember.name }
+      } catch (error) {
+        this.setState({ hasErrored: true })
+        }
+      })
+    return Promise.all(unresolvedPromises); 
+  }
+
+  componentDidMount() {
+    const url = 'http://localhost:3001/api/frontend-staff'
+    this.fetchStaff(url)
+  }
+
   render() {
-    const { staff } = this.state
+    const { staff, hasErrored, isLoading } = this.state
 
     return (
       <div className="App">
@@ -24,9 +64,10 @@ class App extends Component {
         <div className="App-intro">
           <div className='staff'>
             {
-              !staff.length ?
-              <Loader /> :
-              <StaffList staff={staff} />
+              hasErrored ? <p>Sorry! There was an error loading the page.</p> : ''
+            }
+            {
+              isLoading ? <Loader /> : <StaffList staff={staff} />
             }
           </div>
         </div>
