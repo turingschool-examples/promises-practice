@@ -43,8 +43,8 @@ class App extends Component {
       } catch (error) {
         this.setState({ hasErrored: true })
         }
-      })
-    return Promise.all(unresolvedPromises); 
+    })
+    return Promise.all(unresolvedPromises);
   }
 
   componentDidMount() {
