@@ -15,8 +15,9 @@ describe('fetchStaff', () => {
   })
 
   it('calls dispatch with the isLoading action', () => {
-    // This is the 'inner function' that is returned
+
     const thunk = fetchStaff(mockUrl)
+    // This is the 'inner function' that is returned
 
     thunk(mockDispatch)
 
@@ -24,12 +25,12 @@ describe('fetchStaff', () => {
   })
 
   it('should dispatch hasErrored(true) if the response is not ok', async () => {
-    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({ 
+    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
       ok: false,
     }))
 
-    // This is the 'inner function' that is returned
     const thunk = fetchStaff(mockUrl)
+    // This is the 'inner function' that is returned
 
     await thunk(mockDispatch)
 
@@ -38,12 +39,12 @@ describe('fetchStaff', () => {
   })
 
   it('should dispatch isLoading(false) if the response is ok', async () => {
-    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({ 
+    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
       ok: true,
     }))
-    
-    // This is the 'inner function' that is returned
+
     const thunk = fetchStaff(mockUrl)
+    // This is the 'inner function' that is returned
 
     await thunk(mockDispatch)
 
@@ -52,7 +53,7 @@ describe('fetchStaff', () => {
 
   it('should dispatch fetchBios with correct param', async () => {
     const mockStaff = ['Christie', 'Will']
-    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({ 
+    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
       ok: true,
       json: () => Promise.resolve({
         bio: mockStaff
