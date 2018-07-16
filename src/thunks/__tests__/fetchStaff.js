@@ -67,4 +67,22 @@ describe('fetchStaff', () => {
     expect(mockDispatch).toHaveBeenCalledWith(fetchBios(mockStaff))
   })
 
+  it('should dispatch staffFetchDataSuccess', async () => {
+    const mockStaff = ['Christie', 'Will']
+    const expected = [{}, {}]
+
+    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({
+        bio: mockStaff
+      })
+    }))
+
+    const thunk = fetchStaff(mockUrl)
+
+    await thunk(mockDispatch)
+
+    expect(mockDispatch).toHaveBeenCalledWith(staffFetchDataSuccess())
+  })
+
 })
