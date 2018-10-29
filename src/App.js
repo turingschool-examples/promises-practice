@@ -2,58 +2,18 @@ import React, { Component } from 'react';
 import Loader from './Loader.js';
 import './App.css';
 import StaffList from './StaffList.js';
+import { connect } from 'react-redux';
+import { fetchStaff } from './thunks/fetchStaff';
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      staff: [],
-      isLoading: false,
-      hasErrored: false
-    };
-  }
-
-  fetchStaff = async (url) => {
-    try {
-      this.setState({ isLoading: true })
-      const response = await fetch(url)
-      if (!response.ok) {
-        throw Error(response.statusText)
-      }
-      this.setState({ isLoading: false })
-      const data = await response.json()
-      const staff = await this.fetchBios(data.bio)
-      this.setState({ staff })
-    } catch (error) {
-        this.setState({ hasErrored: true })
-      }
-  }
-
-  fetchBios = (staffArray) => {
-    this.setState({ isLoading: true })
-    const unresolvedPromises = staffArray.map(async staffMember => {
-      try {
-        const response = await fetch(staffMember.info)
-        if (!response.ok) {
-          throw Error(response.statusText)
-        }
-        this.setState({ isLoading: false })
-        const data = await response.json()
-        return { ...data, name: staffMember.name }
-      } catch (error) {
-        this.setState({ hasErrored: true })
-        }
-    })
-    return Promise.all(unresolvedPromises);
-  }
-
+  
   componentDidMount() {
     const url = 'http://localhost:3001/api/frontend-staff'
-    this.fetchStaff(url)
+    this.props.fetchStaff(url)
   }
 
   render() {
-    const { staff, hasErrored, isLoading } = this.state
+    const { staff, hasErrored, isLoading } = this.props
 
     return (
       <div className="App">
@@ -76,4 +36,14 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  staff: state.staff,
+  isLoading: state.isLoading,
+  hasErrored: state.hasErrored
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchStaff: (url) => dispatch(fetchStaff(url))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
