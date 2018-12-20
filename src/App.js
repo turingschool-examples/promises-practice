@@ -9,7 +9,7 @@ class App extends Component {
     this.state = {
       staff: [],
       isLoading: false,
-      hasErrored: false
+      error: ''
     };
   }
 
@@ -26,7 +26,7 @@ class App extends Component {
       .then(response => response.json())
       .then(data => this.fetchBios(data.bio))
       .then(staff => this.setState({ staff }))
-      .catch(() => this.setState({ hasErrored: true }))
+      .catch((error) => this.setState({ error: error.message }))
   }
 
   fetchBios = (staffArray) => {
@@ -42,7 +42,7 @@ class App extends Component {
       })
       .then(response => response.json())
       .then(data => ({...data, name: staffMember.name}))
-      .catch(() => this.setState({ hasErrored: true }))
+      .catch((error) => this.setState({ error: error.message }))
     })
     return Promise.all(unresolvedPromises);
   }
@@ -53,7 +53,7 @@ class App extends Component {
   }
 
   render() {
-    const { staff, hasErrored, isLoading } = this.state
+    const { staff, error, isLoading } = this.state
 
     return (
       <div className="App">
@@ -64,7 +64,7 @@ class App extends Component {
         <div className="App-intro">
           <div className='staff'>
             {
-              hasErrored ? <p>Sorry! There was an error loading the page.</p> : ''
+              error ? <p>Sorry! There was an error loading the page.</p> : ''
             }
             {
               isLoading ? <Loader /> : <StaffList staff={staff} />
