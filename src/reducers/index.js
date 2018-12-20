@@ -4,7 +4,7 @@ import { isLoading, hasErrored, staff } from './staffReducer';
 const rootReducer = combineReducers({
   staff,
   isLoading,
-  hasErrored
+  error: hasErrored
 })
 
 export default rootReducer;

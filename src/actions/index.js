@@ -3,9 +3,9 @@ export const isLoading = (bool) => ({
   isLoading: bool
 })
 
-export const hasErrored =(bool) => ({
+export const hasErrored =(message) => ({
   type: 'HAS_ERRORED',
-  hasErrored: bool
+  message
 })
 
 export const staffFetchDataSuccess = (staff) => ({

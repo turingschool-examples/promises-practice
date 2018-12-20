@@ -7,14 +7,13 @@ import { fetchStaff } from './thunks/fetchStaff';
 
 class App extends Component {
 
-
   componentDidMount() {
     const url = 'http://localhost:3001/api/frontend-staff'
     this.props.fetchStaff(url)
   }
 
   render() {
-    const { staff, hasErrored, isLoading } = this.props
+    const { staff, error, isLoading } = this.props
 
     return (
       <div className="App">
@@ -25,7 +24,7 @@ class App extends Component {
         <div className="App-intro">
           <div className='staff'>
             {
-              hasErrored ? <p>Sorry! There was an error loading the page.</p> : ''
+              error && error
             }
             {
               isLoading ? <Loader /> : <StaffList staff={staff} />
@@ -40,7 +39,7 @@ class App extends Component {
 const mapStateToProps = (state) => ({
   staff: state.staff,
   isLoading: state.isLoading,
-  hasErrored: state.hasErrored
+  error: state.error
 })
 
 const mapDispatchToProps = (dispatch) => ({

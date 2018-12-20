@@ -6,7 +6,7 @@ describe('fetchBios', () => {
   let mockDispatch
 
   beforeEach(() => {
-    mockStaffArray = ['Christie', 'Will']
+    mockStaffArray = ['Christie', 'David']
     mockDispatch = jest.fn()
   })
 
@@ -41,15 +41,16 @@ describe('fetchBios', () => {
     expect(mockDispatch).toHaveBeenCalledWith(isLoading(false))
   })
 
-  it('should dispatch hasErrored(true) if the response is not ok', async () => {
+  it('should dispatch hasErrored with a message if the response is not ok', async () => {
     window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
-      ok: false
+      ok: false,
+      statusText: 'Something went wrong'
     }))
 
     const thunk = fetchBios(mockStaffArray)
 
     await thunk(mockDispatch)
 
-    expect(mockDispatch).toHaveBeenCalledWith(hasErrored(true))
+    expect(mockDispatch).toHaveBeenCalledWith(hasErrored('Something went wrong'))
   })
 })

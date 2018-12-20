@@ -13,7 +13,7 @@ export const fetchBios = (staffArray) => {
         const data = await response.json()
         return { ...data, name: staffMember.name}
       } catch (error) {
-        dispatch(hasErrored(true))
+        dispatch(hasErrored(error.message))
         }
       })
     return Promise.all(unresolvedPromises)

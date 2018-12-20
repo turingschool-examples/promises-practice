@@ -14,7 +14,7 @@ export const fetchStaff = (url) => {
       const staff = await dispatch(fetchBios(data.bio))
       dispatch(staffFetchDataSuccess(staff))
     } catch (error) {
-      dispatch(hasErrored(true))
+      dispatch(hasErrored(error.message))
     }
   }
 }
