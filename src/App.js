@@ -64,7 +64,7 @@ class App extends Component {
         <div className="App-intro">
           <div className='staff'>
             {
-              error ? <p>Sorry! There was an error loading the page.</p> : ''
+              error && error
             }
             {
               isLoading ? <Loader /> : <StaffList staff={staff} />
