@@ -1,7 +1,6 @@
 import React from 'react';
 
 const StaffMember = ({ name, bio, image }) => {
-  console.log(name, image);
   return (
     <div className='staff-member'>
       <h1>{name}</h1>
