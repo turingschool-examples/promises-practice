@@ -12,7 +12,7 @@ describe('fetchStaff', () => {
 
   beforeEach(() => {
     mockUrl = 'www.someurl.com'
-    mockStaff = [{name: 'Christie'}, {name: 'Will'}]
+    mockStaff = [{name: 'Christie', info: 'www.somemoreinfo.com'}, {name: 'Will', info: 'www.somemoreinfo.com'}]
     mockDispatch = jest.fn()
     window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
       ok: true,
