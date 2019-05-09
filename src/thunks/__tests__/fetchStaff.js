@@ -1,7 +1,7 @@
 import { fetchStaff } from '../fetchStaff'
 import { fetchBios } from '../fetchBios'
 
-import { isLoading, hasErrored, staffFetchDataSuccess } from '../../actions'
+import { isLoading, hasErrored, setStaff } from '../../actions'
 
 jest.mock('../fetchBios')
 
@@ -15,7 +15,6 @@ describe('fetchStaff', () => {
   })
 
   it('calls dispatch with the isLoading action', () => {
-
     const thunk = fetchStaff(mockUrl)
     // This is the 'inner function' that is returned
 
@@ -38,21 +37,9 @@ describe('fetchStaff', () => {
     expect(mockDispatch).toHaveBeenCalledWith(hasErrored('Something went wrong'))
   })
 
-  it('should dispatch isLoading(false) if the response is ok', async () => {
-    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
-      ok: true,
-    }))
+  it('should dispatch fetchBios with correct param if the response is ok', async () => {
+    const mockStaff = [{name: 'Christie'}, {name: 'Will'}]
 
-    const thunk = fetchStaff(mockUrl)
-    // This is the 'inner function' that is returned
-
-    await thunk(mockDispatch)
-
-    expect(mockDispatch).toHaveBeenCalledWith(isLoading(false))
-  })
-
-  it('should dispatch fetchBios with correct param', async () => {
-    const mockStaff = ['Christie', 'Will']
     window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
       ok: true,
       json: () => Promise.resolve({
@@ -67,8 +54,9 @@ describe('fetchStaff', () => {
     expect(mockDispatch).toHaveBeenCalledWith(fetchBios(mockStaff))
   })
 
-  it('should dispatch staffFetchDataSuccess', async () => {
-    const mockStaff = ['Christie', 'Will']
+  it('should dispatch isLoading(false) if the response is ok', async () => {
+    const mockStaff = [{name: 'Christie'}, {name: 'Will'}]
+    
     window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
       ok: true,
       json: () => Promise.resolve({
@@ -77,10 +65,32 @@ describe('fetchStaff', () => {
     }))
 
     const thunk = fetchStaff(mockUrl)
+    // This is the 'inner function' that is returned
 
     await thunk(mockDispatch)
 
-    expect(mockDispatch).toHaveBeenCalledWith(staffFetchDataSuccess())
+    expect(mockDispatch).toHaveBeenCalledWith(isLoading(false))
   })
 
+  it('should dispatch setStaff with the correct params', async () => {
+    const mockStaff = [{name: 'Christie'}, {name: 'Will'}]
+    const finalStaff = [
+      {name: 'Christie', bio: 'Christie bio', image: 'Christie image'}, {name: 'Will', bio: 'Will bio', image: 'Will image'}
+    ]
+
+    window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({
+        bio: mockStaff
+      })
+    }))
+
+    mockDispatch = jest.fn().mockImplementation(() => finalStaff)
+    
+    const thunk = fetchStaff(mockUrl)
+
+    await thunk(mockDispatch)
+
+    expect(mockDispatch).toHaveBeenCalledWith(setStaff(finalStaff))
+  })
 })
