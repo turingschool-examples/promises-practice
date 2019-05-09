@@ -1,4 +1,4 @@
-import { isLoading, hasErrored, staffFetchDataSuccess } from '../actions'
+import { isLoading, hasErrored, setStaff } from '../actions'
 import { fetchBios } from './fetchBios'
 
 export const fetchStaff = (url) => {
@@ -9,10 +9,10 @@ export const fetchStaff = (url) => {
       if(!response.ok) {
         throw Error(response.statusText)
       }
-      dispatch(isLoading(false))
       const data = await response.json()
       const staff = await dispatch(fetchBios(data.bio))
-      dispatch(staffFetchDataSuccess(staff))
+      dispatch(isLoading(false))
+      dispatch(setStaff(staff))
     } catch (error) {
       dispatch(hasErrored(error.message))
     }
