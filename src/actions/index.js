@@ -8,7 +8,7 @@ export const hasErrored =(message) => ({
   message
 })
 
-export const staffFetchDataSuccess = (staff) => ({
-  type: 'STAFF_FETCH_DATA_SUCCESS',
+export const setStaff = (staff) => ({
+  type: 'SET_STAFF',
   staff
 })
