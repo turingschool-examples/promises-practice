@@ -18,7 +18,7 @@ export const hasErrored = (state = '', action) => {
 
 export const staff = (state = [], action) => {
   switch(action.type) {
-    case 'STAFF_FETCH_DATA_SUCCESS':
+    case 'SET_STAFF':
       return action.staff
     default:
       return state
