@@ -12,8 +12,8 @@ export const fetchBios = (staffArray) => {
         return { ...data, name: staffMember.name}
       } catch (error) {
         dispatch(hasErrored(error.message))
-        }
-      })
+      }
+    })
     return Promise.all(unresolvedPromises)
   }
 }
