@@ -20,9 +20,9 @@ class App extends Component {
       if (!response.ok) {
         throw Error(response.statusText)
       }
-      this.setState({ isLoading: false })
       const data = await response.json()
       const staff = await this.fetchBios(data.bio)
+      this.setState({ isLoading: false })
       this.setState({ staff })
     } catch (error) {
         this.setState({ error: error.message })
@@ -30,14 +30,12 @@ class App extends Component {
   }
 
   fetchBios = (staffArray) => {
-    this.setState({ isLoading: true })
     const unresolvedPromises = staffArray.map(async staffMember => {
       try {
         const response = await fetch(staffMember.info)
         if (!response.ok) {
           throw Error(response.statusText)
         }
-        this.setState({ isLoading: false })
         const data = await response.json()
         return { ...data, name: staffMember.name }
       } catch (error) {
