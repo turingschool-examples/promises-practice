@@ -2,56 +2,18 @@ import React, { Component } from 'react';
 import Loader from './Loader.js';
 import './App.css';
 import StaffList from './StaffList.js';
+import { fetchStaff } from './thunks/fetchStaff'
+import { connect } from 'react-redux'
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      staff: [],
-      isLoading: false,
-      error: ''
-    };
-  }
-
-  fetchStaff = async (url) => {
-    try {
-      this.setState({ isLoading: true })
-      const response = await fetch(url)
-      if (!response.ok) {
-        throw Error(response.statusText)
-      }
-      const data = await response.json()
-      const staff = await this.fetchBios(data.bio)
-      this.setState({ isLoading: false })
-      this.setState({ staff })
-    } catch (error) {
-        this.setState({ error: error.message })
-      }
-  }
-
-  fetchBios = (staffArray) => {
-    const unresolvedPromises = staffArray.map(async staffMember => {
-      try {
-        const response = await fetch(staffMember.info)
-        if (!response.ok) {
-          throw Error(response.statusText)
-        }
-        const data = await response.json()
-        return { ...data, name: staffMember.name }
-      } catch (error) {
-        this.setState({ error: error.message })
-        }
-    })
-    return Promise.all(unresolvedPromises);
-  }
-
+  
   componentDidMount() {
     const url = 'http://localhost:3001/api/frontend-staff'
-    this.fetchStaff(url)
+    this.props.fetchStaff(url)
   }
 
   render() {
-    const { staff, error, isLoading } = this.state
+    const { staff, staffError, staffIsLoading } = this.props
 
     return (
       <div className="App">
@@ -62,10 +24,10 @@ class App extends Component {
         <div className="App-intro">
           <div className='staff'>
             {
-              error && error
+              staffError && staffError
             }
             {
-              isLoading ? <Loader /> : <StaffList staff={staff} />
+              staffIsLoading ? <Loader /> : <StaffList staff={staff} />
             }
           </div>
         </div>
@@ -74,4 +36,14 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = ({staff, staffIsLoading, staffError}) => ({
+  staff,
+  staffIsLoading,
+  staffError
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchStaff: (url) => dispatch(fetchStaff(url))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
